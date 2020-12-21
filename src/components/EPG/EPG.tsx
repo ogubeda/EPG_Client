@@ -1,23 +1,29 @@
 import React, { Component } from 'react';
 import epg from '../../data/epg.json'
-import { IonCard, IonCardHeader, IonCardTitle, IonSlide, IonSlides, IonCardContent } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardTitle, IonSlide, IonSlides, IonCardContent, IonCardSubtitle } from '@ionic/react';
 
 
 class EPG extends Component {
   showDetails(epg) {
-    alert(`Duration: ${epg.duration}\nStart: ${epg.start}`)
+    alert(`Duration: ${epg.duration}\nStart: ${epg.start}\nDescription: ${epg.ext ? epg.ext.text : ''}`)
+  }
+
+  formatDate(unix) {
+    let date = new Date(unix * 1000);
+    let minutes = "0" + date.getMinutes()
+    let week = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
+
+    return `${week[date.getDay()]}\n${date.getHours()}:${minutes.substr(-2)}`;
   }
 
   render() {
     const slideOpts = {
-      slidesPerView: 10,
+      slidesPerView: 9,
       grabCursor: true,
     };
-    console.log(epg.events);
 
     Object.entries(epg.events).map((t, k) => {
-      let arr = t[1].spa.ext.text;
-      console.log();
+      console.log(t[1].spa);
     })
 
     return (
@@ -28,10 +34,12 @@ class EPG extends Component {
             <IonSlide id={t[1].spa.id.toString()}>
               <IonCard>
                 <IonCardHeader>
+                  <IonCardSubtitle>
+                    {this.formatDate(t[1].spa.start)}
+                  </IonCardSubtitle>
                   <IonCardTitle onClick={() => this.showDetails(t[1].spa)}>{t[1].spa.name}</IonCardTitle>
-                  {/* <IonCardContent>
-                    {t[1].spa.ext.text}
-                  </IonCardContent> */}
+                  <IonCardContent>
+                  </IonCardContent>
                 </IonCardHeader>
               </IonCard>
             </IonSlide>
